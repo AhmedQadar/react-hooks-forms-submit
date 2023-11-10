@@ -13,14 +13,21 @@ function Form() {
     setLastName(event.target.value);
   }
 
+  const [errors, setErrors] = useState([]);
+
   function handleSubmit (event) {
     event.preventDefault();
+    if ( firstName.length  && lastName.length > 0 ) {
 
-    const formData ={ firstName: firstName, lastName: lastName,};
-    const dataArray = ([...submittedData, formData])
-    setSubmittedData(dataArray);
-    setFirstName("");
-    setLastName("");
+      const formData ={ firstName: firstName, lastName: lastName,};
+      const dataArray = ([...submittedData, formData])
+      setSubmittedData(dataArray);
+      setFirstName("");
+      setLastName("");
+      setErrors([])
+   } else if (firstName.length || lastName.length <= 0 ){
+    setErrors(["Both names  required"]);
+    } 
   }
 
 
@@ -34,13 +41,21 @@ function Form() {
 
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input type="text" onChange={handleFirstNameChange} value={firstName} />
-      <input type="text" onChange={handleLastNameChange} value={lastName} />
-      <button type="submit">Submit</button>
+    <div>
+      <form onSubmit={handleSubmit}>
+        <input type="text" onChange={handleFirstNameChange} value={firstName} />
+        <input type="text" onChange={handleLastNameChange} value={lastName} />
+        <button type="submit">Submit</button>
+      </form>
+      {errors.length > 0 ? errors.map((error, index) => (
+        <p key={index} style={{color : "red"}}>
+        {error}
+        </p>
+      ))
+        : null}
       <h3>Submissions</h3>
-      {listOfSubmissions}
-    </form>
+        {listOfSubmissions}
+    </div>
   );
 }
 
